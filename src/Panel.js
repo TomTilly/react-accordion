@@ -23,6 +23,7 @@ const styles = {
       height: '16px',
       background: `url(${downArrow})`,
       transition: '0.1s transform linear',
+      transform: (props) => (props.isOpen ? 'rotate(180deg)' : 'rotate(0deg)'),
     },
   },
   body: {},
