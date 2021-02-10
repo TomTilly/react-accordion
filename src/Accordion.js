@@ -1,84 +1,54 @@
 import React, { Component } from 'react';
-import { v4 as uuid } from 'uuid';
+import { withStyles } from '@material-ui/styles';
 import Panel from './Panel';
 
-class Accordion extends Component {
-  static defaultProps = {
-    panels: [
-      {
-        heading: 'Accordion Panel 1',
-        body: (
-          <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur,
-            velit. Vel possimus eligendi iusto! Atque, aperiam nam dolore
-            aliquam autem vel inventore magni at eaque distinctio deleniti
-            excepturi ipsum itaque.
-          </p>
-        ),
-        id: uuid(),
-      },
-      {
-        heading: 'Accordion Panel 2',
-        body: (
-          <div>
-            <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur,
-              velit. Vel possimus eligendi iusto! Atque, aperiam nam dolore
-              aliquam autem vel inventore magni at eaque distinctio deleniti
-              excepturi ipsum itaque.
-            </p>
-            <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur,
-              velit. Vel possimus eligendi iusto! Atque, aperiam nam dolore
-              aliquam autem vel inventore magni at eaque distinctio deleniti
-              excepturi ipsum itaque.
-            </p>
-            <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur,
-              velit. Vel possimus eligendi iusto! Atque, aperiam nam dolore
-              aliquam autem vel inventore magni at eaque distinctio deleniti
-              excepturi ipsum itaque.
-            </p>
-          </div>
-        ),
-        id: uuid(),
-      },
-      {
-        heading: 'Accordion Panel 3',
-        body: (
-          <div>
-            <img src="https://unsplash.it/200" alt="" />
-            <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur,
-              velit. Vel possimus eligendi iusto! Atque, aperiam nam dolore
-              aliquam autem vel inventore magni at eaque distinctio deleniti
-              excepturi ipsum itaque.
-            </p>
-          </div>
-        ),
-        id: uuid(),
-      },
-    ],
-  };
+const styles = {
+  root: {
+    background: 'white',
+    borderRadius: '5px',
+    border: '1px solid #dfdfdf',
+    boxShadow: '0 0 5px #dfdfdf',
+  },
+};
 
+class Accordion extends Component {
   constructor(props) {
     super(props);
     const { panels } = this.props;
     this.state = {
       activePanelId: panels[0].id,
+      isAnimating: false,
     };
+
+    this.changeActivePanel = this.changeActivePanel.bind(this);
+  }
+
+  changeActivePanel(id) {
+    this.setState({
+      isAnimating: true,
+      activePanelId: id,
+    });
   }
 
   render() {
-    const { panels } = this.props;
+    const { panels, classes } = this.props;
+    const { activePanelId } = this.state;
     return (
-      <div className="Accordion">
+      <div className={classes.root}>
         {panels.map((panel) => (
-          <Panel heading={panel.heading}>{panel.body}</Panel>
+          <Panel
+            key={panel.id}
+            id={panel.id}
+            title={panel.title}
+            isOpen={activePanelId === panel.id}
+            changeActivePanel={this.changeActivePanel}
+          >
+            {panel.body}
+          </Panel>
         ))}
       </div>
     );
   }
 }
 
-export default Accordion;
+export default withStyles(styles)(Accordion);
